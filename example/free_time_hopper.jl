@@ -1,6 +1,7 @@
 using Pkg; Pkg.activate(joinpath(@__DIR__, ".."))
 using LinearAlgebra
 using Revise
+using HybridRobotDynamics
 using HybridTrajIpopt
 
 # Define elast bouncing ball model
@@ -20,7 +21,7 @@ N = 25
 hs = ImplicitIntegrator(:hermite_simpson)
 params = ProblemParameters(
     system, hs, stage, terminal, N;
-    #Δtlb=Δtlb, Δtub=Δtub
+    Δtlb=Δtlb, Δtub=Δtub
 )
 
 # Define transition sequence and terminal guard
@@ -44,7 +45,7 @@ urefs = zeros((N-1) * system.nu)
 us = urefs
 
 rk4 = ExplicitIntegrator(:rk4)
-xs = roll_out(system, rk4, N, Δt, us, xic, :impact)
+xs = roll_out(system, rk4, N, Δt, us, xic, :flight)
 plot_2d_states(
     N, system.nx, (1,2), xs;
     title = "Initial Guess",
