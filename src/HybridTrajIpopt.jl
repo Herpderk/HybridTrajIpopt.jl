@@ -14,12 +14,10 @@ export
         ipopt_solve,
         ImplicitIntegrator,
         TransitionTiming,
-        roll_out,
         compose_trajectory,
         decompose_trajectory,
-        bouncing_ball,
-        hopper,
-        TimeVaryingLQR
+        TimeVaryingLQR,
+        roll_out_tvlqr
 
 include("utils.jl")
 include("indexing.jl")

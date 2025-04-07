@@ -48,7 +48,7 @@ cb = SolverCallbacks(
 Δt = 0.05
 us = urefs
 rk4 = ExplicitIntegrator(:rk4)
-xs = roll_out(system, rk4, N, Δt, us, xic, :impact)
+xs = roll_out(system, rk4, N, Δt, us, xic, :downwards)
 plot_2d_states(N, system.nx, (1,2), xs; title="Initial Guess")
 
 # Solve

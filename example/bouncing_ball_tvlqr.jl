@@ -1,6 +1,7 @@
 using Pkg; Pkg.activate(joinpath(@__DIR__, ".."))
 using LinearAlgebra
 using Revise
+using HybridRobotDynamics
 using HybridTrajIpopt
 
 # Define elast bouncing ball model
@@ -54,6 +55,6 @@ tvlqr = TimeVaryingLQR(params, rk4, Q, R, Qf, sequence, yref)
 speedup = 10
 N_sim = N * speedup
 Δt_sim = Δt / speedup
-xs_sim = roll_out(system, rk4, N_sim, Δt_sim, tvlqr, xic, :impact)
+xs_sim = roll_out_tvlqr(system, rk4, N_sim, Δt_sim, tvlqr, xic, :downwards)
 plot_2d_states(N_sim, system.nx, (1,2), xs_sim)
 nothing
