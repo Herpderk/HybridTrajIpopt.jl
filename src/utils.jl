@@ -32,3 +32,13 @@ function get_module_function(
     end
     error("The given function is not implemented in this module!")
 end
+
+"""
+    TransitionTiming(k, transition)
+
+Contains the time step for which the given hybrid transition occurs at the beginning of.
+"""
+struct TransitionTiming
+    k::Int
+    transition::Transition
+end

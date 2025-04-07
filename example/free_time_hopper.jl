@@ -1,6 +1,7 @@
 using Pkg; Pkg.activate(joinpath(@__DIR__, ".."))
 using LinearAlgebra
 using Revise
+using HybridRobotDynamics
 using HybridTrajIpopt
 
 # Define elast bouncing ball model
