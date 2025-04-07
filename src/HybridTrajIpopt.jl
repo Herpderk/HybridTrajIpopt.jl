@@ -22,7 +22,7 @@ export
 include("utils.jl")
 include("indexing.jl")
 include("integrators.jl")
-include("objectives.jl")
+include("objective.jl")
 include("solver.jl")
 include("constraints.jl")
 include("control.jl")
