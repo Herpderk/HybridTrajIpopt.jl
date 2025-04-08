@@ -15,6 +15,10 @@ struct ProblemParameters
     Δt::Union{Nothing, AbstractFloat}
     Δtlb::Union{Nothing, AbstractFloat}
     Δtub::Union{Nothing, AbstractFloat}
+    stage_ineq_constr::Union{Nothing, Function}
+    stage_eq_constr::Union{Nothing, Function}
+    term_ineq_constr::Union{Nothing, Function}
+    term_eq_constr::Union{Nothing, Function}
     function ProblemParameters(
         system::HybridSystem,
         integrator::Integrator,
@@ -23,7 +27,11 @@ struct ProblemParameters
         N::Int;
         Δt::Union{Nothing, AbstractFloat} = nothing,
         Δtlb::Union{Nothing, AbstractFloat} = nothing,
-        Δtub::Union{Nothing, AbstractFloat} = nothing
+        Δtub::Union{Nothing, AbstractFloat} = nothing,
+        stage_ineq_constr::Union{Nothing, Function} = nothing,
+        stage_eq_constr::Union{Nothing, Function} = nothing,
+        term_ineq_constr::Union{Nothing, Function} = nothing,
+        term_eq_constr::Union{Nothing, Function} = nothing
     )::ProblemParameters
         if isnothing(Δt)
             nt = 1
@@ -39,7 +47,13 @@ struct ProblemParameters
         if typeof(integrator) == ExplicitIntegrator
             integrator = ImplicitIntegrator(integrator)
         end
-        return new(system, integrator, obj, dims, idx, Δt, Δtlb, Δtub)
+
+        return new(
+            system, integrator, obj, dims, idx,
+            Δt, Δtlb, Δtub,
+            stage_ineq_constr, stage_eq_constr,
+            term_ineq_constr, term_eq_constr
+        )
     end
 end
 
