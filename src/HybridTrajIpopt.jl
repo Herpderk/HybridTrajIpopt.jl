@@ -6,7 +6,11 @@ using ForwardDiff
 using Ipopt
 using Plots
 
-using HybridRobotDynamics: Transition, HybridSystem, ExplicitIntegrator
+using HybridRobotDynamics:
+        Flow,
+        Transition,
+        HybridSystem,
+        ExplicitIntegrator
 
 export
         ProblemParameters,

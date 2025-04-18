@@ -1,5 +1,5 @@
 module Implicit
-    using ..HybridTrajIpopt: DiffFloat
+    using ..HybridTrajIpopt: DiffFloat, Flow
 
     """
         hermite_simpson(dynamics, x0, u0, x1, Δt)
@@ -7,7 +7,7 @@ module Implicit
     Implicit integrator using the Hermite-Simpson method.
     """
     function hermite_simpson(
-        dynamics::Function,
+        dynamics::Flow,
         x0::Vector{<:DiffFloat},
         u0::Vector{<:DiffFloat},
         x1::Vector{<:DiffFloat},
@@ -36,7 +36,7 @@ ImplicitIntegrator(method_name::Symbol) = ImplicitIntegrator(
 
 ImplicitIntegrator(explicit::ExplicitIntegrator) = ImplicitIntegrator(
     (
-        dynamics::Function,
+        dynamics::Flow,
         x0::Vector{<:DiffFloat},
         u0::Vector{<:DiffFloat},
         x1::Vector{<:DiffFloat},
@@ -52,7 +52,7 @@ const Integrator = Union{ExplicitIntegrator, ImplicitIntegrator}
 Callable struct method for the `ExplicitIntegrator` and `ImplicitIntegrator` structs. Returns either the forward-simulated state or defect residuals between states at adjacent time steps, respectively.
 """
 function (integrator::Integrator)(
-    dynamics::Function,
+    dynamics::Flow,
     primals::Vararg{Union{Vector{<:DiffFloat}, DiffFloat}}
 )::Vector{<:DiffFloat}
     return integrator.method(dynamics, primals...)
