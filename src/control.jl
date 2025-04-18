@@ -35,7 +35,7 @@ function get_tvlqr_gains(
         if k == sequence[seq_idx].k
             reset = flow = sequence[seq_idx].transition.reset
             flow = sequence[seq_idx].transition.flow_J
-            dynamics = (x, u) -> flow(reset(x), u)
+            dynamics = (x, u) -> reset(flow(x, u))
             seq_idx = k == sequence[end].k ? seq_idx : seq_idx + 1
         else
             dynamics = flow
@@ -109,27 +109,25 @@ function roll_out_tvlqr(
     # Init loop variables
     xs = [zeros(system.nx) for k = 1:N]
     xs[1] = x0
-    mode_I = system.modes[init_mode]
+    mI = system.modes[init_mode]
 
     # Init timing mapping from roll-out to TVLQR
     kmap = length(tvlqr.idx.u) / N
 
     # Roll out over time horizon
     for k = 1:N-1
-        xk = xs[k]
+        # Integrate smooth dynamics
+        uk = tvlqr(xs[k], trunc(Int, 1 + k*kmap))
+        xs[k+1] = integrator(mI.flow, xs[k], uk, Δt)
 
         # Reset and update mode if guard is hit
-        for (trans, mode_J) in mode_I.transitions
-            if trans.guard(xk) <= 0.0
-                xk = trans.reset(xk)
-                mode_I = mode_J
+        for (trans, mJ) in mI.transitions
+            if trans.guard(xs[k+1]) <= 0.0
+                xs[k+1] = trans.reset(xs[k+1])
+                mI = mJ
                 break
             end
         end
-
-        # Integrate smooth dynamics
-        uk = tvlqr(xk, trunc(Int, 1 + k*kmap))
-        xs[k+1] = integrator(mode_I.flow, xk, uk, Δt)
     end
     return vcat(xs...)
 end
