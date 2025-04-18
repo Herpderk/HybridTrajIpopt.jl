@@ -1,6 +1,5 @@
 using Pkg; Pkg.activate(joinpath(@__DIR__, ".."))
 using LinearAlgebra
-using Revise
 using HybridRobotDynamics
 using HybridTrajIpopt
 
@@ -55,6 +54,6 @@ tvlqr = TimeVaryingLQR(params, rk4, Q, R, Qf, sequence, yref)
 speedup = 10
 N_sim = N * speedup
 Δt_sim = Δt / speedup
-xs_sim = roll_out_tvlqr(system, rk4, N_sim, Δt_sim, tvlqr, xic, :downwards)
+xs_sim = roll_out_tvlqr(system, rk4, N_sim, Δt_sim, tvlqr, xic, :flight)
 plot_2d_states(N_sim, system.nx, (1,2), xs_sim)
 nothing

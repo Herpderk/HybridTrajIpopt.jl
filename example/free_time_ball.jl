@@ -1,6 +1,5 @@
 using Pkg; Pkg.activate(joinpath(@__DIR__, ".."))
 using LinearAlgebra
-using Revise
 using HybridRobotDynamics
 using HybridTrajIpopt
 
@@ -15,7 +14,7 @@ stage = (x,u) -> x'*Q*x + u'*R*u
 terminal = x -> x'*Qf*x
 
 # Define trajopt parameters
-N = 40
+N = 50
 Δtlb = 5e-3
 Δtub = 5e-1
 hs = ImplicitIntegrator(:hermite_simpson)
@@ -48,7 +47,7 @@ cb = SolverCallbacks(
 Δt = 0.05
 us = urefs
 rk4 = ExplicitIntegrator(:rk4)
-xs = roll_out(system, rk4, N, Δt, us, xic, :downwards)
+xs = roll_out(system, rk4, N, Δt, us, xic, :flight)
 plot_2d_states(N, system.nx, (1,2), xs; title="Initial Guess")
 
 # Solve
